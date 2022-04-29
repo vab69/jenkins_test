@@ -7,24 +7,18 @@ pipeline {
         label 'master'
         }
     triggers { pollSCM('* * * * *') }
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-        timestamps()
+        options {
+            buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+            timestamps()
     }
+	    stage ( 
             stage("create docker image") {
-            steps {
-                echo " ============== start building image =================="
-                dir ('docker/toolbox') {
-                	sh 'docker build -t v69ab/toolbox:latest . '
+                steps {
+                    echo " ============== start building image =================="
+                    dir ('docker/toolbox') {
+                	        sh 'docker build . '
+                    }
                 }
-            }
-        }
-        stage("docker push") {
-            steps {
-                echo " ============== start pushing image =================="
-                sh '''
-                docker push v69ab/toolbox:latest
-                '''
             }
         }
     }
