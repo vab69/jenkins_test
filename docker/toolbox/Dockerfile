@@ -1,55 +1,22 @@
-FROM php:7.4-fpm
+# Использовать официальную среду исполнения Python в качестве родительского образа
+FROM python:2.7-slim
 
-# Set working directory
-WORKDIR /var/www
+# Установить рабочий каталог в /app
+WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libonig-dev \
-    locales \
-    nodejs \
-    npm \
-    zlib1g-dev \
-    libicu-dev \
-    supervisor \
-    g++ \
-    --no-install-recommends \
-    && rm -r /var/lib/apt/lists/* \
-    && sed -i 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
-    && locale-gen
+# Скопируйте содержимое текущего каталога в контейнер в /app
+COPY . /app
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Установите все необходимые пакеты, 
+# указанные в файле requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl intl bcmath gd
-RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
-RUN docker-php-ext-install gd
+# Сделать порт 80 доступным 
+# для мира за пределами этого контейнера
+EXPOSE 80
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Определить переменную среды
+ENV NAME World
 
-# Install NPM
-RUN curl https://www.npmjs.com/install.sh | sh
-
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Change current user to www
-USER www
-
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+# Запустить app.py при запуске контейнера
+CMD ["python", "app.py"]
