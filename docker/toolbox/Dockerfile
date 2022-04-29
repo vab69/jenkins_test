@@ -1,5 +1,9 @@
-FROM alpine
-RUN apk add --update --no-cache curl jq py3-configobj py3-pip py3-setuptools python3 python3-dev
-    
-RUN apk --purge -v del py-pip
-CMD tail -f /dev/null
+FROM node:12.16.2-alpine3.11
+RUN apk --no-cache --update --virtual build-dependencies add \
+    python \
+    make \
+    g++
+WORKDIR /app
+COPY . .
+RUN npm ci
+RUN npm run build --prod
