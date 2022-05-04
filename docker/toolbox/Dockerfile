@@ -13,7 +13,7 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Сделать порт 80 доступным 
 # для мира за пределами этого контейнера
-EXPOSE 80
+EXPOSE 81
 
 # Определить переменную среды
 ENV NAME World
