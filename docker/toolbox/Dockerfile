@@ -22,7 +22,3 @@ ENV NAME World
 # Запустить app.py при запуске контейнера
 CMD ["python", "app.py"]
 
-
-{
-    dockerImage = docker.build("username/repository:tag")
-  }
