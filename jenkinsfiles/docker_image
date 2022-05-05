@@ -1,3 +1,7 @@
+#!groovy
+// Run docker build
+properties([disableConcurrentBuilds()])
+
 pipeline {
     agent { 
         label 'master'
@@ -7,7 +11,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
-	stages {
+    stages {
         stage("docker login") {
             steps {
                 echo " ============== docker login =================="
@@ -18,18 +22,21 @@ pipeline {
                 }
             }
         }
-	
-        stage("create docker image") {                             
+        stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
-                dir ('docker/toolbox') {
-                	sh 'docker build -t 2020011874/vab:tagname . '
+                dir ('docker/vab') {
+                	sh 'docker build -t 2020011874/vab:latest .'
                 }
             }
         }
-	    
-               
-		
-		
+        stage("docker push") {
+            steps {
+                echo " ============== start pushing image =================="
+                sh '''
+                docker push 2020011874/vab:latest
+                '''
+            }
         }
+    }
 }
