@@ -9,7 +9,7 @@ COPY . /app
 
 # Установите все необходимые пакеты, 
 # указанные в файле requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt && \ mc
+RUN pip install --trusted-host pypi.python.org -r requirements.txt && \ apt-get mc
 
 # Сделать порт 80 доступным 
 # для мира за пределами этого контейнера
