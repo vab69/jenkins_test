@@ -10,7 +10,7 @@ COPY . /app
 # Установите все необходимые пакеты, 
 # указанные в файле requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt 
-RUN apt-get install mc
+RUN apt-get update && apt-get install net-tools
 
 # Сделать порт 80 доступным 
 # для мира за пределами этого контейнера
