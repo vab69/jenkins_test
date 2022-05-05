@@ -9,7 +9,7 @@ COPY . /app
 
 # Установите все необходимые пакеты, 
 # указанные в файле requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt && \ mc
 
 # Сделать порт 80 доступным 
 # для мира за пределами этого контейнера
@@ -20,3 +20,8 @@ ENV NAME World
 
 # Запустить app.py при запуске контейнера
 CMD ["python", "app.py"]
+
+
+{
+    dockerImage = docker.build("username/repository:tag")
+  }
