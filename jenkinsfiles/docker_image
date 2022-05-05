@@ -26,7 +26,7 @@ pipeline {
         stage("create docker image") {
             steps {
                 echo " ============== start building image =================="
-                dir ('docker/vab') {
+                dir ('docker/toolbox') {
                 	sh 'docker build -t 2020011874/toolbox:latest .'
                 }
             }
